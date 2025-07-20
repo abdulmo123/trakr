@@ -1,17 +1,19 @@
 #!/bin/bash
 
 # Create venv if doesn't exist
-# if [ ! -d "venv" ]; then
-#     python3 -m venv venv
-# fi
+if [ ! -d "venv" ]; then
+    python3 -m venv venv
+fi
 
 # Activate venv
-# source venv/bin/activate
+source venv/bin/activate
 
-# Install app deps
+# Upgrade pip (optional but good)
+# pip install --upgrade pip
+
+# Install app dependencies
 pip install -r requirements.txt
 
 # Run app
-export FLASK_APP=app.py
-# export FLASK_ENV=development
-flask run
+echo "Starting Flask app..."
+python app.py
