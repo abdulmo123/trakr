@@ -1,7 +1,15 @@
+from dotenv import load_dotenv
 import os 
 
+load_dotenv()
+
 class Config:
-    SECRET_KEY = os.environ.get('SECRET_KEY', 'secret-key')
-    # SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL', 'postgresql://username:password@localhost:5432/workout_tracker')
-    SQLALCHEMY_DATABASE_URI = 'postgresql://username:password@localhost:5432/workout_tracker'
+    SECRET_KEY = os.getenv('SECRET_KEY', 'secret-key')
+    DATABASE_USERNAME = os.getenv('DATABASE_USERNAME')
+    DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
+
+    if not DATABASE_USERNAME or not DATABASE_PASSWORD:
+        raise ValueError("Missing DATABASE_USERNAME or DATABASE_PASSWORD environment variables")
+
+    SQLALCHEMY_DATABASE_URI = f"postgresql://{DATABASE_USERNAME}:{DATABASE_PASSWORD}@localhost:5432/trakr"
     SQLALCHEMY_TRACK_MODIFICATIONS = False
