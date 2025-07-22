@@ -10,7 +10,7 @@ class Workout(db.Model):
     date = db.Column(db.Date, nullable=False)
     workout_type = db.Column(db.String(50))
     notes = db.Column(db.Text)
-    exercises = db.relationship('WorkoutExercises', backref='workout', cascade='all, delete-orphan')
+    # exercises = db.relationship('WorkoutExercises', backref='workout', cascade='all, delete-orphan')
 
 class Exercise(db.Model):
     __tablename__ = 'exercises'
