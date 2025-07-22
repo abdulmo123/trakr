@@ -1,7 +1,15 @@
-# script to run init_db.py file -- pass args 
+param (
+    [string]$action
+)
 
-# ex: python init_db.py --create -- runs create tables method
-# ex: python init_db.py --drop   -- runs drop tables method
-# ex: python init_db.py --truncate -- runs truncate tables methods
+if (-not $action) {
+    Write-Host "Usage: .\init_db.ps1 [create|drop|truncate]"
+    exit 1
+}
 
-python init_db.py --create
+switch ($action.toLower()) {
+    "create"    { python init_db.py --create }
+    "drop"      { python init_db.py --drop }
+    "truncate"  { python init_db.py --truncate }
+    default     { Write-Host "Invalid argument. Use: create, drop, or truncate" }
+}

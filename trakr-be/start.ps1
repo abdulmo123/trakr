@@ -14,7 +14,7 @@ if (-Not (Test-Path -Path ".\venv")) {
 pip install -r requirements.txt
 
 # Run init db scripts to create tables
-.\init_db.ps1 --create
+.\init_db.ps1 create
 
 # Run the Flask app
 Write-Output "Starting Flask app..."
