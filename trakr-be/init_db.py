@@ -1,5 +1,6 @@
 # from dotenv import load_dotenv
 import psycopg2
+import argparse
 import os 
 
 # load_dotenv()
@@ -7,29 +8,45 @@ import os
 DATABASE_USERNAME = os.getenv('DATABASE_USERNAME')
 DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
 
-def create_tables():
-    conn = psycopg2.connect(
+
+def connect():
+    return psycopg2.connect(
         dbname='trakr',
         user=f'{DATABASE_USERNAME}',
         password=f'{DATABASE_PASSWORD}',
         port=5432
     )
 
+
+def create_tables():
+    conn = connect()
     cur = conn.cursor()
 
-    create_exercises_table = """
+    cur.execute("""
         create table if not exists exercises (
             id serial primary key,
             name varchar(100) not null
         );
     """
+    )
 
-    cur.execute(create_exercises_table)
     conn.commit()
-
     cur.close()
     conn.close()
-    print("Tables created successfully!")
+    print("Tables CREATED successfully!")
+
+
+def drop_tables():
+    conn = connect()
+    cur = conn.cursor()
+
+    cur.execute("drop table if exists exercises;")
+
+    conn.commit()
+    cur.close()
+    conn.close()
+    print("Tables DROPPED successfully!")
+
 
 if __name__ == '__main__':
     create_tables()
