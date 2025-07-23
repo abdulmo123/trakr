@@ -10,12 +10,17 @@ DATABASE_PASSWORD = os.getenv('DATABASE_PASSWORD')
 
 
 def connect():
-    return psycopg2.connect(
+    conn = psycopg2.connect(
         dbname='trakr',
         user=f'{DATABASE_USERNAME}',
         password=f'{DATABASE_PASSWORD}',
-        port=5432
+        port=5432,
     )
+
+    with conn.cursor() as cur:
+        cur.execute('SET search_path TO trakr;')
+    conn.commit()
+    return conn
 
 
 def create_tables():
@@ -51,6 +56,7 @@ def drop_tables():
     cur = conn.cursor()
 
     cur.execute("drop table if exists exercises;")
+    cur.execute("drop table if exists workouts;")
     conn.commit()
 
     cur.close()
@@ -63,11 +69,14 @@ def truncate_tables():
     cur = conn.cursor()
 
     cur.execute("truncate table if exists exercises;")
+    cur.execute("truncate table if exists workouts;")
     conn.commit()
 
     cur.close()
     conn.close()
     print("Tables TRUNCATED successfully!")
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Database management script")
     parser.add_argument('--create', action='store_true', help='create tables')
