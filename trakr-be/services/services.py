@@ -27,7 +27,7 @@ def insert_workout(date, workout_type, notes):
     insert_sql = text("""
         insert into trakr.workouts (date, workout_type, notes)
         values (:date, :workout_type, :notes)
-        RETURNING id
+        RETURNING id, date, workout_type, notes
     """
     )
 
@@ -38,7 +38,6 @@ def insert_workout(date, workout_type, notes):
     })
 
     row = result.fetchone()
-    new_id = row[0] if row else None
-
     db.session.commit()
-    return new_id
+
+    return row

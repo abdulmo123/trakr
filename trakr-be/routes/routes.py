@@ -1,5 +1,5 @@
 from flask import Blueprint, jsonify, request
-from services.services import create_exercise, get_all_exercises, get_all_workouts
+from services.services import create_exercise, get_all_exercises, get_all_workouts, insert_workout
 
 api = Blueprint('api', __name__)
 
@@ -45,3 +45,22 @@ def fetch_workouts():
     ]
 
     return jsonify(workouts_list)
+
+@api.route('/workouts', methods=['POST'])
+def insert_workouts():
+    data = request.get_json()
+    date = data.get('date')
+    workout_type = data.get('workout_type')
+    notes = data.get('notes')
+
+    if not date:
+        return jsonify({
+            "error": "Date of workout not given!"
+        }), 400
+
+    workout = insert_workout(date, workout_type, notes)
+    return jsonify({
+        "date": workout.date,
+        "workout_type": workout.workout_type,
+        "notes": workout.notes
+    }), 201
