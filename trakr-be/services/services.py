@@ -1,4 +1,4 @@
-from models import Exercise, db
+from models import Exercise, db, Workout
 
 def get_all_exercises():
     return Exercise.query.all()
@@ -10,3 +10,7 @@ def create_exercise(name):
     db.session.commit()
 
     return new_exercise
+
+
+def get_all_workouts():
+    return Workout.query.all()

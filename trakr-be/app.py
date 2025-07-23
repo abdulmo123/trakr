@@ -1,13 +1,13 @@
 from flask import Flask
 from models import db
 from config import Config
-from routes.exercises import exercises_bp
+from routes.routes import api
 
 app = Flask(__name__)
 app.config.from_object(Config)
 db.init_app(app)
 
-app.register_blueprint(exercises_bp, url_prefix='/api')
+app.register_blueprint(api, url_prefix='/api')
 
 @app.route('/')
 def demo():

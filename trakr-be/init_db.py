@@ -24,9 +24,19 @@ def create_tables():
 
     cur.execute("""
         create table if not exists exercises (
-            id serial primary key,
-            name varchar(100) not null
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(100) NOT NULL
         );
+    """
+    )
+
+    cur.execute("""
+        create table if not exists workouts (
+            id SERIAL PRIMARY KEY,
+            date DATE NOT NULL,
+            workout_type VARCHAR(100),
+            notes TEXT
+        )
     """
     )
 
