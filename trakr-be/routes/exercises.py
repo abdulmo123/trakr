@@ -1,5 +1,5 @@
-from flask import Blueprint, jsonify
-from services.services import get_all_exercises
+from flask import Blueprint, jsonify, request
+from services.services import create_exercise, get_all_exercises
 
 exercises_bp = Blueprint('exercises', __name__)
 
@@ -12,3 +12,20 @@ def fetch_exercises():
     ]
 
     return jsonify(exercises_list)
+
+
+@exercises_bp.route('/exercises', methods=['POST'])
+def add_exercise():
+    data = request.get_json()
+    name = data.get('name')
+
+    if not name:
+        return jsonify({
+            "error": "Exercise name not given!"
+        }), 400
+    
+    exercise = create_exercise(name)
+    return jsonify({
+        "id": exercise.id,
+        "name": exercise.name
+    }), 201
