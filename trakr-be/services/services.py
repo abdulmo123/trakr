@@ -2,15 +2,33 @@ from models import Exercise, db, Workout
 from sqlalchemy import text
 
 def get_all_exercises():
-    return Exercise.query.all()
+    fetch_sql = text("""
+        select * from trakr.exercises
+    """
+    )
+
+    result = db.session.execute(fetch_sql)
+    exercises = result.fetchall()
+
+    return exercises
 
 
 def create_exercise(name):
-    new_exercise=Exercise(name=name)
-    db.session.add(new_exercise)
+    insert_sql = text("""
+        insert into trakr.exercises (name)
+        values (:name)
+        RETURNING id, name
+    """
+    )
+
+    result = db.session.execute(insert_sql, {
+        "name": name
+    })
+
+    row = result.fetchone()
     db.session.commit()
 
-    return new_exercise
+    return row
 
 
 def get_all_workouts():
