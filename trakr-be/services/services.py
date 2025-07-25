@@ -59,3 +59,24 @@ def insert_workout(date, workout_type, notes):
     db.session.commit()
 
     return row
+
+def log_workout_exercises(workout_id, exercise_id, sets, reps, weight):
+    insert_sql = text("""
+        INSERT INTO trakr.workout_exercises (workout_id, exercise_id, sets, reps, weight)
+        values(:workout_id, :exercise_id, :sets, :reps, :weight)
+        RETURNING id, workout_id, exercise_id, sets, reps, weight
+    """
+    )
+
+    result = db.session.execute(insert_sql, {
+        "workout_id": workout_id,
+        "exercise_id": exercise_id,
+        "sets": sets,
+        "reps": reps,
+        "weight": weight
+    })
+
+    row = result.fetchone()
+    db.session.commit()
+
+    return row
