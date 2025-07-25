@@ -28,7 +28,7 @@ def create_tables():
     cur = conn.cursor()
 
     cur.execute("""
-        create table if not exists exercises (
+        create table if not exists trakr.exercises (
             id SERIAL PRIMARY KEY,
             name VARCHAR(100) NOT NULL
         );
@@ -36,12 +36,24 @@ def create_tables():
     )
 
     cur.execute("""
-        create table if not exists workouts (
+        create table if not exists trakr.workouts (
             id SERIAL PRIMARY KEY,
             date DATE NOT NULL,
             workout_type VARCHAR(100),
             notes TEXT
         )
+    """
+    )
+
+    cur.execute("""
+        create table if not exists trakr.workout_exercises (
+            id SERIAL PRIMARY KEY,
+            workout_id INTEGER NOT NULL REFERENCES trakr.exercises(id) ON DELETE CASCADE,
+            exercise_id INTEGER NOT NULL REFERENCES trakr.workouts(id) ON DELETE CASCADE,
+            sets INTEGER,
+            reps INTEGER,
+            weight FLOAT
+        );
     """
     )
 
@@ -55,8 +67,9 @@ def drop_tables():
     conn = connect()
     cur = conn.cursor()
 
-    cur.execute("drop table if exists exercises;")
-    cur.execute("drop table if exists workouts;")
+    cur.execute("drop table if exists trakr.exercises;")
+    cur.execute("drop table if exists trakr.workouts;")
+    cur.execute("drop table if exists trakr.workout_exercises;")
     conn.commit()
 
     cur.close()
@@ -68,8 +81,9 @@ def truncate_tables():
     conn = connect()
     cur = conn.cursor()
 
-    cur.execute("truncate table if exists exercises;")
-    cur.execute("truncate table if exists workouts;")
+    cur.execute("truncate table if exists trakr.exercises;")
+    cur.execute("truncate table if exists trakr.workouts;")
+    cur.execute("truncate table if exsits trakr.workout_exercises;")
     conn.commit()
 
     cur.close()

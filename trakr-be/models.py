@@ -27,4 +27,3 @@ class WorkoutExercise(db.Model):
     sets = db.Column(db.Integer, nullable=False)
     reps = db.Column(db.Integer, nullable=False)
     weight = db.Column(db.Float)
-    exercise = db.relationship('Exercise')
